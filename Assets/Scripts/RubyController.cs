@@ -11,6 +11,9 @@ public class RubyController : MonoBehaviour
     public int health{
         get{return currentHealth;}
     }
+    public float timeInvincible=2f;
+    bool isInvicible;
+    float invincibleTimer;
 
     void Start()
     {
@@ -28,8 +31,20 @@ public class RubyController : MonoBehaviour
         position.x = position.x + speed * horizontal * Time.deltaTime;
         position.y = position.y + speed * vertical * Time.deltaTime;
         rb.MovePosition(position);
+
+        if(isInvicible){
+            invincibleTimer -= Time.deltaTime;
+            if(invincibleTimer < 0){
+                isInvicible = false;
+            }
+        }
     }
     public void ChangeHealth(int amount){
+        if(amount < 0 ){
+            if(isInvicible) return;
+            isInvicible= true;
+            invincibleTimer = timeInvincible;
+        }
         currentHealth = Mathf.Clamp(currentHealth + amount,0,maxHealth);
         Debug.Log(currentHealth +"/"+maxHealth);
     }
