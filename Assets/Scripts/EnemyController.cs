@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO.Compression;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
@@ -12,6 +13,7 @@ public class EnemyController : MonoBehaviour
     float timer;
     int direction=1;
     Animator anim;
+    bool broken = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +26,7 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!broken) return;
         timer -= Time.deltaTime;
         if(timer < 0){
             direction =-direction;
@@ -51,5 +54,12 @@ public class EnemyController : MonoBehaviour
             rubyCon.ChangeHealth(-1);
         }
         
+    }
+    public void Fix()
+    {
+        broken = false;
+        rb.simulated = false;
+        anim.SetTrigger("Fixed");
+       
     }
 }

@@ -7,15 +7,18 @@ public class RubyController : MonoBehaviour
     public float speed = 3f;
     public int maxHealth=5;
     int currentHealth;
-    Rigidbody2D rb;
-    Animator anim;
-    Vector2 lookDirection = new Vector2(1f,0);
-    public int health{
-        get{return currentHealth;}
-    }
     public float timeInvincible=2f;
     bool isInvicible;
     float invincibleTimer;
+    Rigidbody2D rb;
+    Animator anim;
+    Vector2 lookDirection = new Vector2(1f,0);
+
+    public GameObject prefab;
+    
+    public int health{
+        get{return currentHealth;}
+    }
 
     void Start()
     {
@@ -51,6 +54,10 @@ public class RubyController : MonoBehaviour
                 isInvicible = false;
             }
         }
+        if(Input.GetKeyDown(KeyCode.C)){
+            Launch();
+
+        }
     }
     public void ChangeHealth(int amount){
         if(amount < 0 ){
@@ -61,5 +68,15 @@ public class RubyController : MonoBehaviour
         }
         currentHealth = Mathf.Clamp(currentHealth + amount,0,maxHealth);
         Debug.Log(currentHealth +"/"+maxHealth);
+    }
+    void Launch(){
+        GameObject cogBullet = Instantiate(
+            prefab,
+            rb.position+Vector2.up * 0.5f,
+            Quaternion.identity
+        );
+        CogBulletController cogCon = cogBullet.GetComponent<CogBulletController>();
+        cogCon.Launch(lookDirection,5f);
+        anim.SetTrigger("Launch");
     }
 }
