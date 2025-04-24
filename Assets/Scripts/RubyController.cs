@@ -58,6 +58,26 @@ public class RubyController : MonoBehaviour
             Launch();
 
         }
+        if(Input.GetKeyDown(KeyCode.X)){
+            Ray2D ray = new Ray2D(
+                rb.position+Vector2.up * 0.2f,
+                lookDirection
+                );
+            RaycastHit2D hit = Physics2D.Raycast(
+                ray.origin,
+                ray.direction,
+                1.5f,
+                LayerMask.GetMask("NPC")
+                );
+                //Debug.DrawRay(ray.origin,ray.direction * 1.5f,Color.green,1f);
+                if(hit.collider != null){
+                    //Debug.Log("Raycast has hit the object"+hit.collider.gameObject);
+                    NonPlayerCharacter npc = hit.collider.GetComponent<NonPlayerCharacter>();
+                    if(npc != null){
+                        npc.DisplayDialog();
+                    }
+                }
+        }
     }
     public void ChangeHealth(int amount){
         if(amount < 0 ){
@@ -67,7 +87,8 @@ public class RubyController : MonoBehaviour
             anim.SetTrigger("Hit");
         }
         currentHealth = Mathf.Clamp(currentHealth + amount,0,maxHealth);
-        Debug.Log(currentHealth +"/"+maxHealth);
+        //Debug.Log(currentHealth +"/"+maxHealth);
+        UIHealthBar.instance.SetValue(currentHealth/(float)maxHealth);
     }
     void Launch(){
         GameObject cogBullet = Instantiate(
