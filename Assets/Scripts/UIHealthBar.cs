@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,8 +18,17 @@ public class UIHealthBar : MonoBehaviour
     }
 
     public void SetValue(float value){
-        mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,originalSize * value);
+        //mask.reoctTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,originalSize * value);
+        DOTween.To(
+            ()=>mask.rectTransform.rect.width,
+            x=>mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,x),
+            originalSize*value,
+            0.3f
+        );
 
     }
+
+
+
         
 }

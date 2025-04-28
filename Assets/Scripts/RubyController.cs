@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RubyController : MonoBehaviour
@@ -15,6 +16,10 @@ public class RubyController : MonoBehaviour
     Vector2 lookDirection = new Vector2(1f,0);
 
     public GameObject prefab;
+
+    AudioSource se;
+    public AudioClip cogSe;
+    public AudioClip hitSe;
     
     public int health{
         get{return currentHealth;}
@@ -25,6 +30,7 @@ public class RubyController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         currentHealth=maxHealth;
         anim = GetComponent<Animator>();
+        se = GetComponent<AudioSource>();
         
     }
 
@@ -85,9 +91,10 @@ public class RubyController : MonoBehaviour
             isInvicible= true;
             invincibleTimer = timeInvincible;
             anim.SetTrigger("Hit");
+            se.PlayOneShot(hitSe);
         }
         currentHealth = Mathf.Clamp(currentHealth + amount,0,maxHealth);
-        //Debug.Log(currentHealth +"/"+maxHealth);
+        Debug.Log(currentHealth +"/"+maxHealth);
         UIHealthBar.instance.SetValue(currentHealth/(float)maxHealth);
     }
     void Launch(){
@@ -98,6 +105,7 @@ public class RubyController : MonoBehaviour
         );
         CogBulletController cogCon = cogBullet.GetComponent<CogBulletController>();
         cogCon.Launch(lookDirection,5f);
+        se.PlayOneShot(cogSe);
         anim.SetTrigger("Launch");
     }
 }

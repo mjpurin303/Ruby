@@ -1,9 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class HealthCollectable : MonoBehaviour
 {
+    AudioSource se;
+    void Start()
+    {
+        se=GetComponent<AudioSource>();
+        
+    }
     void OnTriggerEnter2D(Collider2D other)
     {
        //Debug.Log("triggerと接触:"+other);
@@ -11,7 +16,9 @@ public class HealthCollectable : MonoBehaviour
        if(rubyCon != null){
         if(rubyCon.health == rubyCon.maxHealth){return;}
         rubyCon.ChangeHealth(1);
-        Destroy(gameObject);
+        se.Play();
+        GetComponent<SpriteRenderer>().DOFade(0f,1f)
+        .OnComplete(()=>Destroy(gameObject));
        }
     }
 
